@@ -6,6 +6,8 @@
 package com.approxteam.olympiaserver;
 
 import java.io.IOException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.websocket.OnClose;
@@ -26,9 +28,11 @@ public class GameSocket {
     @Inject
     private GameSessionHandler sessionHandler;
     
+    private static final Logger log = LogManager.getLogger(GameSocket.class);
+    
     @OnOpen
         public void open(Session session) {
-            System.out.println(session.toString());
+            log.info("CONNECTED: " + session.getRequestURI());
             sessionHandler.addSession(session);
             session.getAsyncRemote().sendText("TEST");
             
