@@ -9,6 +9,6 @@ package com.approxteam.antcolosseumserver.gamelogic;
  *
  * @author adamr
  */
-public abstract class Action {
+public enum Action {
     
 }
