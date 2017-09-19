@@ -3,12 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.approxteam.olympiaserver.gamelogic;
+package com.approxteam.antcolosseumserver.gamelogic;
+
+import javax.websocket.Session;
 
 /**
  *
  * @author adamr
  */
-public abstract class Action {
-    
+public interface Recognizer {
+    public void recognize(Session session, Action action);
 }

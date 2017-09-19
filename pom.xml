@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.approxteam</groupId>
-    <artifactId>OlympiaServer</artifactId>
+    <artifactId>AntColosseumServer</artifactId>
     <version>1.0</version>
     <packaging>war</packaging>
 
-    <name>OlympiaServer</name>
+    <name>AntColosseumServer</name>
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
@@ -34,7 +34,7 @@
     </dependencies>
 
     <build>
-        <finalName>OlympiaServer</finalName>
+        <finalName>AntColosseumServer</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
