@@ -10,5 +10,4 @@ package com.approxteam.antcolosseumserver.gamelogic;
  * @author adamr
  */
 public enum Action {
-    
 }
