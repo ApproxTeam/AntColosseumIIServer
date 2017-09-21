@@ -5,12 +5,13 @@
  */
 package com.approxteam.antcolosseumserver.gamelogic;
 
-import javax.websocket.Session;
+import java.io.Serializable;
 
 /**
  *
  * @author adamr
  */
-public interface Recognizer {
-    public void recognize(Session session, Action action);
+public enum ResponseType implements Serializable {
+    OK(),
+    ERROR();
 }

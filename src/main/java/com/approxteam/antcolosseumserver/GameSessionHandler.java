@@ -7,6 +7,8 @@ package com.approxteam.antcolosseumserver;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 import javax.enterprise.context.ApplicationScoped;
 import javax.websocket.Session;
 
@@ -24,5 +26,26 @@ public class GameSessionHandler {
     
     public void removeSession(Session session) {
         sessions.remove(session);
+    }
+    
+    public void doActionOnAll(Consumer<Session> consumer) {
+        for(Session session: sessions) {
+            consumer.accept(session);
+        }
+    }
+    
+    public void doActionOnWhen(Consumer<Session> consumer, Predicate<Session> ... predicates) {
+        for(Session session: sessions) {
+            for(Predicate<Session> predicate: predicates) {
+                if(!predicate.test(session)) {
+                    return;
+                }
+            }
+            consumer.accept(session);
+        }
+    }
+    
+    public void doActionOn(Session session, Consumer<Session> consumer) {
+        consumer.accept(session);
     }
 }

@@ -5,7 +5,9 @@
  */
 package com.approxteam.antcolosseumserver;
 
+import com.approxteam.antcolosseumserver.gamelogic.WebSocketRecognizer;
 import java.io.IOException;
+import javax.ejb.EJB;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javax.enterprise.context.ApplicationScoped;
@@ -27,6 +29,9 @@ public class GameSocket {
 
     @Inject
     private GameSessionHandler sessionHandler;
+    
+    @EJB
+    private WebSocketRecognizer recognizer;
     
     private static final Logger log = LogManager.getLogger(GameSocket.class);
     

@@ -5,9 +5,37 @@
  */
 package com.approxteam.antcolosseumserver.gamelogic;
 
+import com.approxteam.antcolosseumserver.gamelogic.actionDivisors.RegisterDivision;
+import com.fasterxml.jackson.annotation.JsonView;
+
 /**
  *
  * @author adamr
  */
-public enum Action {
+public class Action {
+    @JsonView(Views.ActionView.class)
+    private ActionType type;
+    
+    @JsonView(Views.RegisterActionView.class)
+    private RegisterDivision registerDivisor;
+
+    public ActionType getType() {
+        return type;
+    }
+
+    public RegisterDivision getRegisterDivisor() {
+        return registerDivisor;
+    }
+
+    @Override
+    public String toString() {
+        return "Action{" + "type=" + type + ", registerDivisor=" + registerDivisor + '}';
+    }
+
+    
+
+    
+    
+    
+    
 }
