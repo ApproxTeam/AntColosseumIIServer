@@ -5,6 +5,7 @@
  */
 package com.approxteam.antcolosseumserver;
 
+import com.approxteam.antcolosseumserver.gamelogic.Action;
 import com.approxteam.antcolosseumserver.gamelogic.WebSocketRecognizer;
 import java.io.IOException;
 import javax.ejb.EJB;
@@ -39,7 +40,6 @@ public class GameSocket {
         public void open(Session session) {
             log.info("CONNECTED: " + session.getRequestURI());
             sessionHandler.addSession(session);
-            session.getAsyncRemote().sendText("TEST");
             
     }   
     @OnClose
@@ -52,12 +52,14 @@ public class GameSocket {
     }
 
     @OnMessage
-        public void handleMessage(String message, Session session) {
-        System.out.println(message);
-        try {
-            session.getBasicRemote().sendText("TEST222");
-        } catch (IOException ex) {
-            session.getAsyncRemote().sendText("UNRECOGNIZED");
+    public void handleMessage(String message, Session session) {
+        log.info("MESSAGE: " + message);
+        Action action = recognizer.recognize(message);
+        log.info("ACTION: ");
+        if(action != null) {
+            if(action.getType().getConsumer() != null) {
+                action.getType().getConsumer().consume(session, action);
+            }
         }
     }
 }
