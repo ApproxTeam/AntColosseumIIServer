@@ -5,10 +5,13 @@
  */
 package com.approxteam.antcolosseumserver.gamelogic;
 
+import com.approxteam.antcolosseumserver.entities.Player;
 import com.approxteam.antcolosseumserver.gamelogic.interfaces.RegisterBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceUnit;
 
 /**
  *
@@ -18,11 +21,23 @@ import javax.persistence.PersistenceContext;
 public class WebSocketRegisterer implements RegisterBean{
 
     @PersistenceContext(unitName = "AntColosseumPU")
-    private EntityManager em;
+    private EntityManager entityManager;
     
     @Override
     public Response register(Action action) {
+        String nickName = action.getRegisterDivisor().getLogin();
+        String password = action.getRegisterDivisor().getPassword();
+        String email = action.getRegisterDivisor().getEmail();
+        Player player = new Player();
+        player.setEmail(email);
+        player.setPassword(password);
+        player.setNickname(nickName);
+        save(player);
         return null;
+    }
+    
+    public void save(Object o) {
+        entityManager.persist(o);
     }
     
 }

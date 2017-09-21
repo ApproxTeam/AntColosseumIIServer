@@ -8,10 +8,8 @@ package com.approxteam.antcolosseumserver.gamelogic;
 import com.approxteam.antcolosseumserver.gamelogic.interfaces.Recognizer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.ejb.Local;
 import javax.ejb.Stateless;
-import javax.websocket.Session;
 
 /**
  *

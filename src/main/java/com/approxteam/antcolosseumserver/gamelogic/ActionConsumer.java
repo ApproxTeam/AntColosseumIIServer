@@ -5,10 +5,11 @@
  */
 package com.approxteam.antcolosseumserver.gamelogic;
 
+import com.approxteam.antcolosseumserver.gamelogic.interfaces.RegisterBean;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import javax.ejb.EJB;
+import javax.inject.Inject;
 import javax.websocket.Session;
 
 /**
@@ -17,8 +18,11 @@ import javax.websocket.Session;
  */
 public enum ActionConsumer {
     
-    REGISTER(new BiConsumer<Session, Action>() {
-
+    REGISTER(new BiConsumer<Session, Action>() { 
+        
+        @EJB(lookup = "java:module/WebSocketRegisterer")
+        private RegisterBean registerer;       
+        
         @Override
         public void accept(Session t, Action u) {
             registerer.register(u);
@@ -29,8 +33,6 @@ public enum ActionConsumer {
     private BiConsumer<Session, Action> consumer;
     private Predicate<Session>[] predicates;
     
-    @EJB
-    private static WebSocketRegisterer registerer;    
     
 
     private ActionConsumer(BiConsumer<Session, Action> consumer, Predicate<Session>[] predicates) {

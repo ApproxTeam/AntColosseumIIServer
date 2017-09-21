@@ -7,8 +7,10 @@ package com.approxteam.antcolosseumserver;
 
 import com.approxteam.antcolosseumserver.gamelogic.Action;
 import com.approxteam.antcolosseumserver.gamelogic.WebSocketRecognizer;
+import com.approxteam.antcolosseumserver.gamelogic.interfaces.Recognizer;
 import java.io.IOException;
 import javax.ejb.EJB;
+import javax.ejb.Singleton;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javax.enterprise.context.ApplicationScoped;
@@ -25,6 +27,7 @@ import javax.websocket.server.ServerEndpoint;
  * @author adamr
  */
 @ApplicationScoped
+@Singleton
 @ServerEndpoint("/game")
 public class GameSocket {
 
@@ -32,7 +35,7 @@ public class GameSocket {
     private GameSessionHandler sessionHandler;
     
     @EJB
-    private WebSocketRecognizer recognizer;
+    private Recognizer recognizer;
     
     private static final Logger log = LogManager.getLogger(GameSocket.class);
     
@@ -55,7 +58,7 @@ public class GameSocket {
     public void handleMessage(String message, Session session) {
         log.info("MESSAGE: " + message);
         Action action = recognizer.recognize(message);
-        log.info("ACTION: ");
+        log.info("ACTION: " + action);
         if(action != null) {
             if(action.getType().getConsumer() != null) {
                 action.getType().getConsumer().consume(session, action);
