@@ -7,6 +7,7 @@ package com.approxteam.antcolosseumserver.gamelogic;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.function.Consumer;
 import javax.websocket.Session;
 
@@ -14,7 +15,7 @@ import javax.websocket.Session;
  *
  * @author adamr
  */
-public enum ActionType {
+public enum ActionType implements Serializable {
     
     ACTION(Views.ActionView.class),
     REGISTER(Views.RegisterActionView.class, ActionConsumer.REGISTER);

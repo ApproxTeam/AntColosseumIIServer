@@ -5,8 +5,9 @@
     <jta-data-source>java:/jboss/datasources/antColosseum</jta-data-source>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
-      <property name="hibernate.hbm2ddl.auto" value="create"/>
+      <!-- <property name="hibernate.hbm2ddl.auto" value="create"/> -->
       <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
+      <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
     </properties>
   </persistence-unit>
 </persistence>

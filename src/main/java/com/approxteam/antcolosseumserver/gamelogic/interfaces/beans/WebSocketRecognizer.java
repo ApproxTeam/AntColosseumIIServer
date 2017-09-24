@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.approxteam.antcolosseumserver.gamelogic;
+package com.approxteam.antcolosseumserver.gamelogic.interfaces.beans;
 
+import com.approxteam.antcolosseumserver.gamelogic.Action;
+import com.approxteam.antcolosseumserver.gamelogic.Views;
 import com.approxteam.antcolosseumserver.gamelogic.interfaces.Recognizer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;

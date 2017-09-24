@@ -6,6 +6,7 @@
 package com.approxteam.antcolosseumserver.entities;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,10 +27,12 @@ public class Player implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "player_seq_generator")
     private Long id;
     
+    @Column(unique = true, nullable = false)
     private String nickname;
     
     private String password;
     
+    @Column(unique = true, nullable = false)
     private String email;
 
     public Long getId() {

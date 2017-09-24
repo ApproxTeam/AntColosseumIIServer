@@ -7,12 +7,13 @@ package com.approxteam.antcolosseumserver.gamelogic;
 
 import com.approxteam.antcolosseumserver.gamelogic.actionDivisors.RegisterDivision;
 import com.fasterxml.jackson.annotation.JsonView;
+import java.io.Serializable;
 
 /**
  *
  * @author adamr
  */
-public class Action {
+public class Action implements Serializable {
     @JsonView(Views.ActionView.class)
     private ActionType type;
     

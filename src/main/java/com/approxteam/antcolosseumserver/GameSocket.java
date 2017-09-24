@@ -6,7 +6,7 @@
 package com.approxteam.antcolosseumserver;
 
 import com.approxteam.antcolosseumserver.gamelogic.Action;
-import com.approxteam.antcolosseumserver.gamelogic.WebSocketRecognizer;
+import com.approxteam.antcolosseumserver.gamelogic.interfaces.beans.WebSocketRecognizer;
 import com.approxteam.antcolosseumserver.gamelogic.interfaces.Recognizer;
 import java.io.IOException;
 import javax.ejb.EJB;
@@ -41,24 +41,25 @@ public class GameSocket {
     
     @OnOpen
         public void open(Session session) {
-            log.info("CONNECTED: " + session.getRequestURI());
+            log.info("OPENED NEW WEBSOCKET SESSION: " + session.getId());
             sessionHandler.addSession(session);
             
     }   
     @OnClose
         public void close(Session session) {
+            log.info("CLOSED WEBSOCKET SESSION: " + session.getId());
             sessionHandler.removeSession(session);
     }   
 
     @OnError
         public void onError(Throwable error) {
+            
     }
 
     @OnMessage
     public void handleMessage(String message, Session session) {
-        log.info("MESSAGE: " + message);
+        log.info("MESSAGE FROM " + session.getId() + ": " + message);
         Action action = recognizer.recognize(message);
-        log.info("ACTION: " + action);
         if(action != null) {
             if(action.getType().getConsumer() != null) {
                 action.getType().getConsumer().consume(session, action);

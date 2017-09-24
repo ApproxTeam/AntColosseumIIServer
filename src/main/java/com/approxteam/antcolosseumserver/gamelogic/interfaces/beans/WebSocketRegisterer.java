@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.approxteam.antcolosseumserver.gamelogic;
+package com.approxteam.antcolosseumserver.gamelogic.interfaces.beans;
 
 import com.approxteam.antcolosseumserver.entities.Player;
+import com.approxteam.antcolosseumserver.gamelogic.Action;
+import com.approxteam.antcolosseumserver.gamelogic.Response;
 import com.approxteam.antcolosseumserver.gamelogic.interfaces.RegisterBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

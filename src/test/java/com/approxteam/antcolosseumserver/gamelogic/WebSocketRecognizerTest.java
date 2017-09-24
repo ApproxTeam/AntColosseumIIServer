@@ -5,6 +5,7 @@
  */
 package com.approxteam.antcolosseumserver.gamelogic;
 
+import com.approxteam.antcolosseumserver.gamelogic.interfaces.beans.WebSocketRecognizer;
 import com.approxteam.antcolosseumserver.gamelogic.interfaces.Recognizer;
 import javax.ejb.embeddable.EJBContainer;
 import javax.websocket.Session;

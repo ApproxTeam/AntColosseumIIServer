@@ -5,27 +5,32 @@
  */
 package com.approxteam.antcolosseumserver.gamelogic;
 
+import com.approxteam.antcolosseumserver.context.ContextUtils;
 import com.approxteam.antcolosseumserver.gamelogic.interfaces.RegisterBean;
+import java.io.Serializable;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.inject.Inject;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.rmi.PortableRemoteObject;
 import javax.websocket.Session;
 
 /**
  *
  * @author adamr
  */
-public enum ActionConsumer {
+public enum ActionConsumer implements Serializable {
     
     REGISTER(new BiConsumer<Session, Action>() { 
         
-        @EJB(lookup = "java:module/WebSocketRegisterer")
-        private RegisterBean registerer;       
-        
         @Override
         public void accept(Session t, Action u) {
-            registerer.register(u);
+            ContextUtils.getRegisterBean().register(u);
         }
         
     });
