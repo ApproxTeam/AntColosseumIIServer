@@ -6,9 +6,7 @@
 package com.approxteam.antcolosseumserver;
 
 import com.approxteam.antcolosseumserver.gamelogic.Action;
-import com.approxteam.antcolosseumserver.gamelogic.interfaces.beans.WebSocketRecognizer;
 import com.approxteam.antcolosseumserver.gamelogic.interfaces.Recognizer;
-import java.io.IOException;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import org.apache.logging.log4j.LogManager;

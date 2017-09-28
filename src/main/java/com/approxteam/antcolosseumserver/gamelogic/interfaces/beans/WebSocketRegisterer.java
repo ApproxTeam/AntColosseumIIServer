@@ -8,18 +8,21 @@ package com.approxteam.antcolosseumserver.gamelogic.interfaces.beans;
 import com.approxteam.antcolosseumserver.entities.Player;
 import com.approxteam.antcolosseumserver.gamelogic.Action;
 import com.approxteam.antcolosseumserver.gamelogic.Response;
+import com.approxteam.antcolosseumserver.gamelogic.ResponseType;
 import com.approxteam.antcolosseumserver.gamelogic.interfaces.RegisterBean;
+import javax.ejb.Stateful;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceUnit;
+import javax.persistence.PersistenceException;
+import org.hibernate.HibernateException;
+import org.hibernate.exception.ConstraintViolationException;
 
 /**
  *
  * @author adamr
  */
-@Stateless
+@Stateful
 public class WebSocketRegisterer implements RegisterBean{
 
     @PersistenceContext(unitName = "AntColosseumPU")
@@ -34,8 +37,12 @@ public class WebSocketRegisterer implements RegisterBean{
         player.setEmail(email);
         player.setPassword(password);
         player.setNickname(nickName);
-        save(player);
-        return null;
+        try {
+            save(player);
+        } catch(HibernateException e) {
+            return Response.of(ResponseType.REGISTERERROR_EMAILORLOGINEXIST);
+        }
+        return Response.of(ResponseType.REGISTEROK);
     }
     
     public void save(Object o) {

@@ -13,5 +13,29 @@ import java.io.Serializable;
  */
 public enum ResponseType implements Serializable {
     OK(),
-    ERROR();
+    ERROR(),
+    REGISTERERROR_EMAILORLOGINEXIST("E-mail or login exists"),
+    REGISTEROK("Succesful registered");
+    
+    private String description;
+    private String notifyType;
+
+    private ResponseType(String description, String notifyType) {
+        this.description = description;
+        this.notifyType = notifyType;
+    }
+    
+    private ResponseType(String description) {
+        this(description, "TOAST");
+    }
+    
+    private ResponseType() {
+        this("");
+    }
+
+    public String getDescription() {
+        return description;
+    }
+    
+    
 }
