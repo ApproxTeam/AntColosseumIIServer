@@ -14,17 +14,33 @@ import java.io.Serializable;
 public class Response implements Serializable {
     private ResponseType type;
     private String description;
-    private String[] args = new String[0];
+    private NotifyType notifyType;
+    private String[] args;
 
-    public Response(ResponseType type) {
+    public Response(ResponseType type, String description, NotifyType notifyType, String ... args) {
         this.type = type;
-        this.description = type.getDescription();
+        this.description = description;
+        this.notifyType = notifyType;
+        this.args = args;
+    }
+    
+    public Response(ResponseType type) {
+        this(type, type.getDescription(), type.getNotifyType(), new String[0]);
+    }
+    public Response(ResponseType type, NotifyType notifyType) {
+        this(type, type.getDescription(), notifyType, new String[0]);
     }
     
     public Response(ResponseType type, String ... args) {
-        this.type = type;
-        this.description = type.getDescription();
-        this.args = args;
+        this(type, type.getDescription(), type.getNotifyType(), args);
+    }
+    
+    public Response(String description, ResponseType type, String ... args) {
+        this(type, description, type.getNotifyType(), args);
+    }
+    
+    public Response(ResponseType type, NotifyType notifyType, String ... args) {
+        this(type, type.getDescription(), notifyType, args);
     }
 
     public ResponseType getType() {
@@ -38,11 +54,10 @@ public class Response implements Serializable {
     public String getDescription() {
         return description;
     }
-    
-    
-    
-    
-    
+
+    public NotifyType getNotifyType() {
+        return notifyType;
+    }    
     
     public static Response of(ResponseType type) {
         return new Response(type);
@@ -50,5 +65,17 @@ public class Response implements Serializable {
     
     public static Response of(ResponseType type, String ... args) {
         return new Response(type, args);
+    }
+    
+    public static Response of(String description, ResponseType type, String ... args) {
+        return new Response(description, type, args);
+    }
+    
+    public static Response of(ResponseType type, NotifyType notifyType, String ... args) {
+        return new Response(type, notifyType, args);
+    }
+    
+    public static Response of(ResponseType type, String description, NotifyType notifyType, String ... args) {
+        return new Response(type, description, notifyType, args);
     }
 }
