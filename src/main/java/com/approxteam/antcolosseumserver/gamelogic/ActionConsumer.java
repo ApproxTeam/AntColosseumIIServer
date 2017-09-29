@@ -10,7 +10,6 @@ import com.approxteam.antcolosseumserver.gamelogic.interfaces.RegisterBean;
 import java.io.Serializable;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
-import javax.persistence.PersistenceException;
 import javax.websocket.Session;
 
 /**
@@ -30,7 +29,7 @@ public enum ActionConsumer implements Serializable {
                 if(registered) {
                     response = Response.of(ResponseType.REGISTEROK);
                 }
-            } catch(PersistenceException e) {
+            } catch(Exception e) {
                 response = Response.of(ResponseType.REGISTERERROR_EMAILORLOGINEXIST);
             }
             SessionUtils.serializeAndSendAsynchronously(t, response);
