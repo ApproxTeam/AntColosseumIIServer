@@ -43,7 +43,6 @@ public class WebSocketRegisterer implements RegisterBean{
         return true;
     }
     
-    @AroundInvoke
     public void save(Object o) throws Exception {
         entityManager.persist(o);
         entityManager.flush();
