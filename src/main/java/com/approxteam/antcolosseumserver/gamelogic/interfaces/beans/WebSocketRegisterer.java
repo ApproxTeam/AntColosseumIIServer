@@ -27,7 +27,7 @@ public class WebSocketRegisterer implements RegisterBean{
     private EntityManager entityManager;
     
     @Override
-    public Response register(Action action) {
+    public boolean register(Action action) throws PersistenceException{
         String nickName = action.getRegisterDivisor().getLogin();
         String password = action.getRegisterDivisor().getPassword();
         String email = action.getRegisterDivisor().getEmail();
@@ -38,9 +38,9 @@ public class WebSocketRegisterer implements RegisterBean{
         try {
             save(player);
         } catch(PersistenceException e) {
-            return Response.of(ResponseType.REGISTERERROR_EMAILORLOGINEXIST);
+            throw e;
         }
-        return Response.of(ResponseType.REGISTEROK);
+        return true;
     }
     
     public void save(Object o) {

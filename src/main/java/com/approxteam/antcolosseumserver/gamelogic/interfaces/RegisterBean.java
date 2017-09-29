@@ -7,8 +7,8 @@ package com.approxteam.antcolosseumserver.gamelogic.interfaces;
 
 import com.approxteam.antcolosseumserver.gamelogic.Action;
 import com.approxteam.antcolosseumserver.gamelogic.Response;
-import javax.ejb.Local;
 import javax.ejb.Remote;
+import javax.persistence.PersistenceException;
 
 /**
  *
@@ -16,5 +16,5 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface RegisterBean {
-    public Response register(Action action);
+    public boolean register(Action action) throws PersistenceException;
 }
