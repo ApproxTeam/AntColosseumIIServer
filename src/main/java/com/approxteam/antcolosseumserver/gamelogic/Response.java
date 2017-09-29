@@ -5,6 +5,7 @@
  */
 package com.approxteam.antcolosseumserver.gamelogic;
 
+import com.approxteam.antcolosseumserver.gamelogic.notify.NotifyType;
 import java.io.Serializable;
 
 /**
