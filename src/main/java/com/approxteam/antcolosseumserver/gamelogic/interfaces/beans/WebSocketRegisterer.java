@@ -16,6 +16,7 @@ import javax.interceptor.AroundInvoke;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import org.apache.logging.log4j.LogManager;
 
 /**
  *
@@ -26,6 +27,8 @@ public class WebSocketRegisterer implements RegisterBean{
 
     @PersistenceContext(unitName = "AntColosseumPU")
     private EntityManager entityManager;
+    
+    private static final org.apache.logging.log4j.Logger log = LogManager.getLogger(WebSocketRegisterer.class);
     
     @Override
     public boolean register(Action action) throws PersistenceException{
@@ -39,6 +42,7 @@ public class WebSocketRegisterer implements RegisterBean{
         try {
             save(player);
         } catch (PersistenceException ex) {
+            log.info(ex);
             throw ex;
         }
         return true;
