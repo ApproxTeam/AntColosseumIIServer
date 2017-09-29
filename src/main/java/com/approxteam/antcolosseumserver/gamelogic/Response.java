@@ -12,6 +12,7 @@ import java.io.Serializable;
  * @author adamr
  */
 public class Response implements Serializable {
+    private String className = this.getClass().getSimpleName();
     private ResponseType type;
     private String description;
     private NotifyType notifyType;
@@ -57,7 +58,13 @@ public class Response implements Serializable {
 
     public NotifyType getNotifyType() {
         return notifyType;
-    }    
+    } 
+
+    public String getClassName() {
+        return className;
+    }
+    
+    
     
     public static Response of(ResponseType type) {
         return new Response(type);
