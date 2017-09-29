@@ -7,11 +7,11 @@ package com.approxteam.antcolosseumserver.gamelogic.interfaces.beans;
 
 import com.approxteam.antcolosseumserver.entities.Player;
 import com.approxteam.antcolosseumserver.gamelogic.Action;
-import com.approxteam.antcolosseumserver.gamelogic.Response;
-import com.approxteam.antcolosseumserver.gamelogic.ResponseType;
 import com.approxteam.antcolosseumserver.gamelogic.interfaces.RegisterBean;
 import java.sql.SQLException;
 import javax.ejb.Stateful;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
@@ -37,14 +37,19 @@ public class WebSocketRegisterer implements RegisterBean{
         player.setNickname(nickName);
         try {
             save(player);
-        } catch(PersistenceException e) {
-            throw e;
+        } catch (SQLException ex) { 
+            return false;
         }
         return true;
     }
     
-    public void save(Object o) {
-        entityManager.persist(o);
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public void save(Object o) throws SQLException{
+        try {
+            entityManager.persist(o);
+        } catch(PersistenceException e) {
+            throw new SQLException();
+        }
     }
     
 }
