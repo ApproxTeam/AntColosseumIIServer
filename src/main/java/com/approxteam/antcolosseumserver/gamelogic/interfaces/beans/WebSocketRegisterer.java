@@ -8,6 +8,7 @@ package com.approxteam.antcolosseumserver.gamelogic.interfaces.beans;
 import com.approxteam.antcolosseumserver.entities.Player;
 import com.approxteam.antcolosseumserver.gamelogic.Action;
 import com.approxteam.antcolosseumserver.gamelogic.interfaces.RegisterBean;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateful;
@@ -27,7 +28,7 @@ public class WebSocketRegisterer implements RegisterBean{
     private EntityManager entityManager;
     
     @Override
-    public boolean register(Action action) throws Exception{
+    public boolean register(Action action) throws PersistenceException{
         String nickName = action.getRegisterDivisor().getLogin();
         String password = action.getRegisterDivisor().getPassword();
         String email = action.getRegisterDivisor().getEmail();
@@ -37,13 +38,13 @@ public class WebSocketRegisterer implements RegisterBean{
         player.setNickname(nickName);
         try {
             save(player);
-        } catch (Exception ex) {
+        } catch (PersistenceException ex) {
             throw ex;
         }
         return true;
     }
     
-    public void save(Object o) throws Exception {
+    public void save(Object o) throws PersistenceException {
         entityManager.persist(o);
         entityManager.flush();
     }

@@ -30,7 +30,7 @@ public enum ActionConsumer implements Serializable {
                 if(registered) {
                     response = Response.of(ResponseType.REGISTEROK);
                 }
-            } catch(Exception e) {
+            } catch(PersistenceException e) {
                 response = Response.of(ResponseType.REGISTERERROR_EMAILORLOGINEXIST);
             }
             SessionUtils.serializeAndSendAsynchronously(t, response);
