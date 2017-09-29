@@ -10,13 +10,11 @@ import com.approxteam.antcolosseumserver.gamelogic.Action;
 import com.approxteam.antcolosseumserver.gamelogic.Response;
 import com.approxteam.antcolosseumserver.gamelogic.ResponseType;
 import com.approxteam.antcolosseumserver.gamelogic.interfaces.RegisterBean;
+import java.sql.SQLException;
 import javax.ejb.Stateful;
-import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
-import org.hibernate.HibernateException;
-import org.hibernate.exception.ConstraintViolationException;
 
 /**
  *
@@ -39,7 +37,7 @@ public class WebSocketRegisterer implements RegisterBean{
         player.setNickname(nickName);
         try {
             save(player);
-        } catch(HibernateException e) {
+        } catch(PersistenceException e) {
             return Response.of(ResponseType.REGISTERERROR_EMAILORLOGINEXIST);
         }
         return Response.of(ResponseType.REGISTEROK);
