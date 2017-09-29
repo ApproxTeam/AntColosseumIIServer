@@ -16,5 +16,5 @@ import javax.persistence.PersistenceException;
  */
 @Remote
 public interface RegisterBean {
-    public boolean register(Action action) throws PersistenceException;
+    public boolean register(Action action) throws Exception;
 }
