@@ -60,7 +60,8 @@ public class GameSocket {
         Action action = recognizer.recognize(message);
         if(action != null) {
             if(action.getType().getConsumer() != null) {
-                action.getType().getConsumer().consume(session, action);
+                PlayerHandler playerHandler = sessionHandler.getPlayerBySession(session);
+                action.getType().getConsumer().consume(playerHandler, action);
             }
         }
     }

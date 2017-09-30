@@ -16,7 +16,9 @@ public enum ResponseType implements Serializable {
     OK("Success"),
     ERROR("Undefined Error", NotifyType.TOASTERROR),
     REGISTERERROR_EMAILORLOGINEXIST("E-mail or login exists", NotifyType.TOASTERROR),
-    REGISTEROK("Succesful registered");
+    REGISTEROK("Succesful registered"),
+    LOGINOK("Succesful login"),
+    LOGINERROR_BADLOGINORPASSWORD("Bad login or password", NotifyType.TOASTERROR);
     
     private String description;
     private NotifyType notifyType;

@@ -16,6 +16,11 @@ import javax.interceptor.AroundInvoke;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.ParameterExpression;
+import javax.persistence.criteria.Root;
 import org.apache.logging.log4j.LogManager;
 
 /**
@@ -31,7 +36,7 @@ public class WebSocketRegisterer implements RegisterBean{
     private static final org.apache.logging.log4j.Logger log = LogManager.getLogger(WebSocketRegisterer.class);
     
     @Override
-    public boolean register(Action action) throws Exception{
+    public boolean register(Action action){
         String nickName = action.getRegisterDivisor().getLogin();
         String password = action.getRegisterDivisor().getPassword();
         String email = action.getRegisterDivisor().getEmail();
@@ -39,18 +44,44 @@ public class WebSocketRegisterer implements RegisterBean{
         player.setEmail(email);
         player.setPassword(password);
         player.setNickname(nickName);
+        return save(player);
+    }
+   
+    @Override
+    public Player findPlayer(Action action) {
+        String login = action.getLoginDivision().getLogin();
+        return find(login);
+        
+    } 
+    
+    
+    private Player find(String login) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Player> cq = cb.createQuery(Player.class);
+        Root<Player> player = cq.from(Player.class);
+        ParameterExpression<String> name = cb.parameter(String.class);
+        cq.select(player).where(cb.equal(player.get("nickname"), name));
+        TypedQuery<Player> q = entityManager.createQuery(cq);
+        q.setParameter(name, login);
         try {
-            save(player);
-        } catch (Exception ex) {
-            log.info(ex);
-            throw ex;
+            Player result = q.getSingleResult();
+            return result;
+        } catch(Exception e) {
+            return null;
+        }
+    }
+    
+    
+    
+    private boolean save(Object o) {
+        try {
+            entityManager.persist(o);
+            entityManager.flush();
+        } catch(Exception e) {
+            return false;
         }
         return true;
     }
-    
-    public void save(Object o) throws Exception {
-        entityManager.persist(o);
-        entityManager.flush();
-    }
+
     
 }

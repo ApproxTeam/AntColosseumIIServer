@@ -27,6 +27,7 @@ public class WebSocketRecognizer implements Recognizer{
         try {
             Action act = getAccordingBaseAction(data);
             act = act.getType().getActionFor(data);
+            System.out.println(act);
             return act;
         } catch (IOException ex) {
             return null; 

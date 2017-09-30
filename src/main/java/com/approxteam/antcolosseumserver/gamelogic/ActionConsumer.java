@@ -5,12 +5,13 @@
  */
 package com.approxteam.antcolosseumserver.gamelogic;
 
-import com.approxteam.antcolosseumserver.context.ContextUtils;
-import com.approxteam.antcolosseumserver.gamelogic.interfaces.RegisterBean;
+import com.approxteam.antcolosseumserver.PlayerHandler;
+import com.approxteam.antcolosseumserver.gamelogic.consumers.LoginConsumer;
+import com.approxteam.antcolosseumserver.gamelogic.consumers.RegisterConsumer;
+import com.approxteam.antcolosseumserver.gamelogic.predicates.InState;
 import java.io.Serializable;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
-import javax.websocket.Session;
 
 /**
  *
@@ -18,41 +19,32 @@ import javax.websocket.Session;
  */
 public enum ActionConsumer implements Serializable {
     
-    REGISTER(new BiConsumer<Session, Action>() { 
-        
-        @Override
-        public void accept(Session t, Action u) {
-            RegisterBean bean = ContextUtils.getRegisterBean();
-            Response response = Response.of(ResponseType.ERROR);
-            try {
-                boolean registered = bean.register(u);
-                if(registered) {
-                    response = Response.of(ResponseType.REGISTEROK);
-                }
-            } catch(Exception e) {
-                response = Response.of(ResponseType.REGISTERERROR_EMAILORLOGINEXIST);
-            }
-            SessionUtils.serializeAndSendAsynchronously(t, response);
-        }
-        
-        
-    });
+    REGISTER(new RegisterConsumer(), new InState(PlayerState.MAINMENU)),
+    LOGIN(new LoginConsumer(), new InState(PlayerState.MAINMENU));
     
-    private BiConsumer<Session, Action> consumer;
-    private Predicate<Session>[] predicates;
+    private BiConsumer<PlayerHandler, Action> consumer;
+    private Predicate<PlayerHandler>[] predicates;
     
     
 
-    private ActionConsumer(BiConsumer<Session, Action> consumer, Predicate<Session>[] predicates) {
+    private ActionConsumer(BiConsumer<PlayerHandler, Action> consumer, Predicate<PlayerHandler> ... predicates) {
         this.consumer = consumer;
         this.predicates = predicates;
     }
 
-    private ActionConsumer(BiConsumer<Session, Action> consumer) {
+    private ActionConsumer(BiConsumer<PlayerHandler, Action> consumer) {
         this.consumer = consumer;
     }
     
-    public void consume(Session session, Action action) {
+    public void consume(PlayerHandler session, Action action) {
+        if(predicates != null && predicates.length != 0) {
+            for(Predicate<PlayerHandler> predicate : predicates) {
+                if(!predicate.test(session)) {
+                    return;
+                }
+            }
+            
+        } 
         this.consumer.accept(session, action);
     }
     

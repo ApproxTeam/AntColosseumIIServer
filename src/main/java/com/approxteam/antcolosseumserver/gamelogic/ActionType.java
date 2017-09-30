@@ -18,7 +18,8 @@ import javax.websocket.Session;
 public enum ActionType implements Serializable {
     
     ACTION(Views.ActionView.class),
-    REGISTER(Views.RegisterActionView.class, ActionConsumer.REGISTER);
+    REGISTER(Views.RegisterActionView.class, ActionConsumer.REGISTER),
+    LOGIN(Views.LoginActionView.class, ActionConsumer.LOGIN);
     
     private Class viewClass;
     private ObjectMapper mapper = new ObjectMapper();

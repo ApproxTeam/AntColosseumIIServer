@@ -9,16 +9,11 @@ package com.approxteam.antcolosseumserver.gamelogic;
  *
  * @author adamr
  */
-public class Views {
-    public static class ActionView {
-        
-    }
+public enum PlayerState {
+    MAINMENU,
+    CHOOSING,
+    TRAINING,
+    COLOSSEUM,
+    TAVERN;
     
-    public static class RegisterActionView extends ActionView {
-        
-    }
-    
-    public static class LoginActionView extends ActionView {
-        
-    }
 }

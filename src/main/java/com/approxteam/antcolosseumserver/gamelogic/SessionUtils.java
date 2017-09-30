@@ -5,6 +5,7 @@
  */
 package com.approxteam.antcolosseumserver.gamelogic;
 
+import com.approxteam.antcolosseumserver.PlayerHandler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.Serializable;
@@ -28,6 +29,12 @@ public class SessionUtils {
             log.info("->SEND TO " + session.getId() + ": " + response);
         } catch (JsonProcessingException ex) {
             log.error("Cannot serializable object: " + serializable);
+        }
+    }
+    
+     public static void serializeAndSendAsynchronously(PlayerHandler session, Serializable serializable) {
+        if(session.getSession() != null) {
+            serializeAndSendAsynchronously(session.getSession(), serializable);
         }
     }
 }
