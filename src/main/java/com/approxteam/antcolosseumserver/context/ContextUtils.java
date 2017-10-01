@@ -5,8 +5,7 @@
  */
 package com.approxteam.antcolosseumserver.context;
 
-import com.approxteam.antcolosseumserver.GameSocket;
-import com.approxteam.antcolosseumserver.gamelogic.ActionConsumer;
+import com.approxteam.antcolosseumserver.gamelogic.interfaces.Mailer;
 import com.approxteam.antcolosseumserver.gamelogic.interfaces.RegisterBean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -49,5 +48,17 @@ public class ContextUtils {
             log.error("FAILED TO GET REGISTERBEAN - CONTEXTUTILS");
         }
         return registerer;
+    }
+    
+    public static Mailer getMailer() {
+        Mailer mailer = null;
+        try {
+            Context context = getCtx();
+            Object o = context.lookup("java:module/WebSocketMailer");
+            mailer = (Mailer) PortableRemoteObject.narrow(o, Mailer.class);
+        } catch (NamingException ex) {
+            log.error("FAILED TO GET MAILER - CONTEXTUTILS");
+        }
+        return mailer;
     }
 }

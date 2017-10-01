@@ -6,14 +6,12 @@
 package com.approxteam.antcolosseumserver.entities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.Column;
+import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
 /**
@@ -21,25 +19,23 @@ import javax.persistence.SequenceGenerator;
  * @author adamr
  */
 @Entity
-@SequenceGenerator(name = "player_seq_generator", allocationSize = 20, 
-initialValue = 1, sequenceName = "player_seq")
-public class Player implements Serializable {
+@SequenceGenerator(name = "playerActivation_seq_generator", allocationSize = 20, 
+initialValue = 1, sequenceName = "playerActivation_seq")
+public class PlayerActivation implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "player_seq_generator")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "playerActivation_seq_generator")
     private Long id;
     
-    @Column(unique = true, nullable = false)
-    private String nickname;
+    @ManyToOne
+    private Player player;
     
-    private String password;
+    private boolean activated;
     
-    @Column(unique = true, nullable = false)
-    private String email;
+    private Date dateActivated;
     
-    @OneToMany
-    private List<PlayerActivation> playerActivations = new ArrayList<>();
+    private String token;
 
     public Long getId() {
         return id;
@@ -48,32 +44,6 @@ public class Player implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    
-    
 
     @Override
     public int hashCode() {
@@ -85,10 +55,10 @@ public class Player implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Player)) {
+        if (!(object instanceof PlayerActivation)) {
             return false;
         }
-        Player other = (Player) object;
+        PlayerActivation other = (PlayerActivation) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -97,7 +67,7 @@ public class Player implements Serializable {
 
     @Override
     public String toString() {
-        return "com.approxteam.antcolosseumserver.db.Player[ id=" + id + " ]";
+        return "com.approxteam.antcolosseumserver.entities.Activation[ id=" + id + " ]";
     }
     
 }

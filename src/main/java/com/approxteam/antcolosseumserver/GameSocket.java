@@ -6,13 +6,19 @@
 package com.approxteam.antcolosseumserver;
 
 import com.approxteam.antcolosseumserver.gamelogic.Action;
+import com.approxteam.antcolosseumserver.gamelogic.interfaces.Mailer;
 import com.approxteam.antcolosseumserver.gamelogic.interfaces.Recognizer;
+import com.approxteam.antcolosseumserver.gamelogic.interfaces.beans.WebSocketMailer;
+import com.approxteam.antcolosseumserver.mailer.MailWrapper;
+import java.util.logging.Level;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
@@ -35,12 +41,17 @@ public class GameSocket {
     @EJB
     private Recognizer recognizer;
     
+    @EJB
+    private Mailer mailer;
+    
     private static final Logger log = LogManager.getLogger(GameSocket.class);
     
     @OnOpen
         public void open(Session session) {
             log.info("OPENED NEW WEBSOCKET SESSION: " + session.getId());
             sessionHandler.addSession(session);
+            MailWrapper wrapper = new MailWrapper("hejtarmia@gmail.com", "adam.razniewski@gmail.com", "BLABLA", "BASDASDASD");
+            log.info(mailer.send(wrapper));
             
     }   
     @OnClose
