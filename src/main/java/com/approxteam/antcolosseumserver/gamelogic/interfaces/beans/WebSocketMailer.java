@@ -52,8 +52,13 @@ public class WebSocketMailer implements Mailer{
             Message message = new MimeMessage(buildSession());
             InternetAddress from = new InternetAddress(wrapper.getFrom());
             message.setFrom(from);
-            InternetAddress to = new InternetAddress(wrapper.getTo());
-            message.setRecipient(Message.RecipientType.TO, to);
+            InternetAddress[] addresses = InternetAddress.parse(wrapper.getTo());
+            if(addresses == null) {
+                return false;
+            } else if(addresses.length == 0) {
+                return false;
+            }
+            message.setRecipients(Message.RecipientType.TO, addresses);
             message.setSubject(wrapper.getTitle());
             message.setText(wrapper.getContent());
             

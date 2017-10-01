@@ -50,8 +50,6 @@ public class GameSocket {
         public void open(Session session) {
             log.info("OPENED NEW WEBSOCKET SESSION: " + session.getId());
             sessionHandler.addSession(session);
-            MailWrapper wrapper = new MailWrapper("hejtarmia@gmail.com", "adam.razniewski@gmail.com", "BLABLA", "BASDASDASD");
-            log.info(mailer.send(wrapper));
             
     }   
     @OnClose
