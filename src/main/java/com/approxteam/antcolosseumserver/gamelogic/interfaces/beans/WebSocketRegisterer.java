@@ -7,10 +7,13 @@ package com.approxteam.antcolosseumserver.gamelogic.interfaces.beans;
 
 import com.approxteam.antcolosseumserver.entities.Player;
 import com.approxteam.antcolosseumserver.gamelogic.Action;
+import com.approxteam.antcolosseumserver.gamelogic.interfaces.Mailer;
 import com.approxteam.antcolosseumserver.gamelogic.interfaces.RegisterBean;
+import com.approxteam.antcolosseumserver.mailer.MailWrapper;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.interceptor.AroundInvoke;
 import javax.persistence.EntityManager;
@@ -33,6 +36,9 @@ public class WebSocketRegisterer implements RegisterBean{
     @PersistenceContext(unitName = "AntColosseumPU")
     private EntityManager entityManager;
     
+    @EJB
+    private Mailer mailer;
+    
     private static final org.apache.logging.log4j.Logger log = LogManager.getLogger(WebSocketRegisterer.class);
     
     @Override
@@ -44,7 +50,13 @@ public class WebSocketRegisterer implements RegisterBean{
         player.setEmail(email);
         player.setPassword(password);
         player.setNickname(nickName);
+        mailer.send(constructActivationEmail(email));
         return save(player);
+    }
+    
+    private MailWrapper constructActivationEmail(String to) {
+        MailWrapper wrapper = new MailWrapper("antqueen@antcolosseum.pl", to, "REGISTER ACTIVATION", "TODO");
+        return wrapper;
     }
    
     @Override
