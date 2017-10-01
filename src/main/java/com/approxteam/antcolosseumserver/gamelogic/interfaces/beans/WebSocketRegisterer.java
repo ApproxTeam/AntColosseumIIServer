@@ -50,7 +50,7 @@ public class WebSocketRegisterer implements RegisterBean{
         player.setEmail(email);
         player.setPassword(password);
         player.setNickname(nickName);
-        mailer.send(constructActivationEmail(email));
+        //mailer.send(constructActivationEmail(email));
         return save(player);
     }
     
