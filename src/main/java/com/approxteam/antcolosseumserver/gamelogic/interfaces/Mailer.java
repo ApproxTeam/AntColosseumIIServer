@@ -14,5 +14,5 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface Mailer {
-    public boolean send(MailWrapper wrapper);
+    public void send(MailWrapper wrapper);
 }

@@ -10,8 +10,7 @@ import com.approxteam.antcolosseumserver.configuration.PropertyComment;
 import com.approxteam.antcolosseumserver.gamelogic.interfaces.Mailer;
 import com.approxteam.antcolosseumserver.mailer.MailWrapper;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.ejb.Asynchronous;
 import javax.ejb.Stateless;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -47,28 +46,38 @@ public class WebSocketMailer implements Mailer{
     }
     
     @Override
-    public boolean send(MailWrapper wrapper) {
+    @Asynchronous
+    public void send(MailWrapper wrapper) {
+        InternetAddress[] addresses = new InternetAddress[0];
         try {
             Message message = new MimeMessage(buildSession());
             InternetAddress from = new InternetAddress(wrapper.getFrom());
             message.setFrom(from);
-            InternetAddress[] addresses = InternetAddress.parse(wrapper.getTo());
+            addresses = InternetAddress.parse(wrapper.getTo());
             if(addresses == null) {
-                return false;
+                return;
             } else if(addresses.length == 0) {
-                return false;
+                return;
             }
             message.setRecipients(Message.RecipientType.TO, addresses);
             message.setSubject(wrapper.getTitle());
             message.setText(wrapper.getContent());
             
             Transport.send(message);
-        
+            log.info("MAIL SENDED TO: " + constructAddressesString(addresses));
         } catch (MessagingException ex) {
-            ex.printStackTrace();
-            return false;
+            log.error(ex);
+            log.error("Cannot send email to: " + constructAddressesString(addresses));
         }
-        return true;
+    }
+    
+    private String constructAddressesString(InternetAddress ... addreses) {
+        StringBuilder builder = new StringBuilder();
+        for(InternetAddress address: addreses) {
+            builder.append(address.getAddress());
+            builder.append(";");
+        }
+        return builder.toString();
     }
     
 }

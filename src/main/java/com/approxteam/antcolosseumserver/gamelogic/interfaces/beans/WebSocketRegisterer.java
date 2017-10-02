@@ -5,20 +5,20 @@
  */
 package com.approxteam.antcolosseumserver.gamelogic.interfaces.beans;
 
+import com.approxteam.antcolosseumserver.configuration.PropertiesBuilder;
+import com.approxteam.antcolosseumserver.configuration.PropertyComment;
 import com.approxteam.antcolosseumserver.entities.Player;
 import com.approxteam.antcolosseumserver.gamelogic.Action;
 import com.approxteam.antcolosseumserver.gamelogic.interfaces.Mailer;
 import com.approxteam.antcolosseumserver.gamelogic.interfaces.RegisterBean;
 import com.approxteam.antcolosseumserver.mailer.MailWrapper;
-import java.sql.SQLIntegrityConstraintViolationException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.approxteam.antcolosseumserver.templates.ActivationMail;
+import java.util.Properties;
+import java.util.UUID;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
-import javax.interceptor.AroundInvoke;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -31,8 +31,11 @@ import org.apache.logging.log4j.LogManager;
  * @author adamr
  */
 @Stateful
+@PropertyComment(desc = "Provide default link")
 public class WebSocketRegisterer implements RegisterBean{
 
+    private final Properties properties = PropertiesBuilder.getProperties(WebSocketRegisterer.class);
+    
     @PersistenceContext(unitName = "AntColosseumPU")
     private EntityManager entityManager;
     
@@ -50,13 +53,18 @@ public class WebSocketRegisterer implements RegisterBean{
         player.setEmail(email);
         player.setPassword(password);
         player.setNickname(nickName);
-        //mailer.send(constructActivationEmail(email));
+        String token = UUID.randomUUID().toString().replaceAll("-", "");
+        sendActivationLink(email, nickName, token);
         return save(player);
     }
     
-    private MailWrapper constructActivationEmail(String to) {
-        MailWrapper wrapper = new MailWrapper("antqueen@antcolosseum.pl", to, "REGISTER ACTIVATION", "TODO");
+    private MailWrapper constructActivationEmail(String to, String nickName, String token) {
+        MailWrapper wrapper = new ActivationMail(to, constructActivationLink(token), nickName);
         return wrapper;
+    }
+    
+    private String constructActivationLink(String token) {
+        return properties.getProperty("appLink") + token;
     }
    
     @Override
@@ -93,6 +101,11 @@ public class WebSocketRegisterer implements RegisterBean{
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void sendActivationLink(String email, String nickName, String token) {
+        mailer.send(constructActivationEmail(email, nickName, token));
     }
 
     

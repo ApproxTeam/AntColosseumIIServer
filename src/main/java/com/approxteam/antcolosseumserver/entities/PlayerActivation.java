@@ -31,7 +31,7 @@ public class PlayerActivation implements Serializable {
     @ManyToOne
     private Player player;
     
-    private boolean activated;
+    private boolean activated = false;
     
     private Date dateActivated;
     
@@ -69,5 +69,38 @@ public class PlayerActivation implements Serializable {
     public String toString() {
         return "com.approxteam.antcolosseumserver.entities.Activation[ id=" + id + " ]";
     }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public boolean isActivated() {
+        return activated;
+    }
+
+    public void setActivated(boolean activated) {
+        this.activated = activated;
+    }
+
+    public Date getDateActivated() {
+        return dateActivated;
+    }
+
+    public void setDateActivated(Date dateActivated) {
+        this.dateActivated = dateActivated;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+    
     
 }
