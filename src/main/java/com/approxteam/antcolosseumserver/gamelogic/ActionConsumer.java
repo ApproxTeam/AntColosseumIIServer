@@ -6,6 +6,7 @@
 package com.approxteam.antcolosseumserver.gamelogic;
 
 import com.approxteam.antcolosseumserver.PlayerHandler;
+import com.approxteam.antcolosseumserver.gamelogic.consumers.AccountActivationConsumer;
 import com.approxteam.antcolosseumserver.gamelogic.consumers.LoginConsumer;
 import com.approxteam.antcolosseumserver.gamelogic.consumers.RegisterConsumer;
 import com.approxteam.antcolosseumserver.gamelogic.predicates.InState;
@@ -20,7 +21,8 @@ import java.util.function.Predicate;
 public enum ActionConsumer implements Serializable {
     
     REGISTER(new RegisterConsumer(), new InState(PlayerState.MAINMENU)),
-    LOGIN(new LoginConsumer(), new InState(PlayerState.MAINMENU));
+    LOGIN(new LoginConsumer(), new InState(PlayerState.MAINMENU)),
+    ACCOUNTACTIVATION(new AccountActivationConsumer());
     
     private BiConsumer<PlayerHandler, Action> consumer;
     private Predicate<PlayerHandler>[] predicates;

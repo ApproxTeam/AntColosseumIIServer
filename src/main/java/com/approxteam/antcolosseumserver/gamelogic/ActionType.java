@@ -8,8 +8,6 @@ package com.approxteam.antcolosseumserver.gamelogic;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.function.Consumer;
-import javax.websocket.Session;
 
 /**
  *
@@ -19,7 +17,8 @@ public enum ActionType implements Serializable {
     
     ACTION(Views.ActionView.class),
     REGISTER(Views.RegisterActionView.class, ActionConsumer.REGISTER),
-    LOGIN(Views.LoginActionView.class, ActionConsumer.LOGIN);
+    LOGIN(Views.LoginActionView.class, ActionConsumer.LOGIN),
+    ACCOUNTACTIVATION(Views.AccountActivationActionView.class, ActionConsumer.ACCOUNTACTIVATION);
     
     private Class viewClass;
     private ObjectMapper mapper = new ObjectMapper();

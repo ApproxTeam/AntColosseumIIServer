@@ -18,7 +18,11 @@ public enum ResponseType implements Serializable {
     REGISTERERROR_EMAILORLOGINEXIST("E-mail or login exists", NotifyType.TOASTERROR),
     REGISTEROK("Succesful registered"),
     LOGINOK("Succesful login"),
-    LOGINERROR_BADLOGINORPASSWORD("Bad login or password", NotifyType.TOASTERROR);
+    LOGINERROR_BADLOGINORPASSWORD("Bad login or password", NotifyType.TOASTERROR),
+    ACCOUNTACTIVATION_BADLOGINORTOKEN("Bad nickname or token :(", NotifyType.TOASTERROR),
+    ACCOUNTACTIVATIONOK("Succesful activated"),
+    NOTACTIVATED("Not activated :(", NotifyType.TOASTERROR), 
+    ACCOUNTACTIVATION_TOKENALREADYACTIVATED("Token is already activated", NotifyType.TOASTERROR);
     
     private String description;
     private NotifyType notifyType;

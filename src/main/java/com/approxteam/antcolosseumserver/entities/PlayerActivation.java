@@ -7,6 +7,7 @@ package com.approxteam.antcolosseumserver.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -35,6 +36,7 @@ public class PlayerActivation implements Serializable {
     
     private Date dateActivated;
     
+    @Column(unique = true, nullable = false)
     private String token;
 
     public Long getId() {

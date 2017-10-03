@@ -5,6 +5,7 @@
  */
 package com.approxteam.antcolosseumserver.gamelogic;
 
+import com.approxteam.antcolosseumserver.gamelogic.actionDivisors.AccountActivationDivisor;
 import com.approxteam.antcolosseumserver.gamelogic.actionDivisors.LoginDivision;
 import com.approxteam.antcolosseumserver.gamelogic.actionDivisors.RegisterDivision;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -24,6 +25,9 @@ public class Action implements Serializable {
     @JsonView(Views.LoginActionView.class)
     private LoginDivision loginDivisor;
     
+    @JsonView(Views.AccountActivationActionView.class)
+    private AccountActivationDivisor activateDivisor;
+    
     public ActionType getType() {
         return type;
     }
@@ -34,6 +38,10 @@ public class Action implements Serializable {
 
     public LoginDivision getLoginDivision() {
         return loginDivisor;
+    }
+
+    public AccountActivationDivisor getActivateDivisor() {
+        return activateDivisor;
     }
     
     

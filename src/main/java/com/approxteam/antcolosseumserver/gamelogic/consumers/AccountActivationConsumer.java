@@ -7,6 +7,7 @@ package com.approxteam.antcolosseumserver.gamelogic.consumers;
 
 import com.approxteam.antcolosseumserver.PlayerHandler;
 import com.approxteam.antcolosseumserver.context.ContextUtils;
+import com.approxteam.antcolosseumserver.entities.PlayerActivation;
 import com.approxteam.antcolosseumserver.gamelogic.Action;
 import com.approxteam.antcolosseumserver.gamelogic.Response;
 import com.approxteam.antcolosseumserver.gamelogic.ResponseType;
@@ -18,17 +19,22 @@ import java.util.function.BiConsumer;
  *
  * @author adamr
  */
-public class RegisterConsumer implements BiConsumer<PlayerHandler, Action>  {
+public class AccountActivationConsumer implements BiConsumer<PlayerHandler, Action>  {
 
     @Override
     public void accept(PlayerHandler t, Action u) {
         RegisterBean bean = ContextUtils.getRegisterBean();
         Response response = Response.of(ResponseType.ERROR);
-        boolean registered = bean.register(u);
-        if(registered) {
-            response = Response.of(ResponseType.REGISTEROK);
+        PlayerActivation activation = bean.findActivation(u.getActivateDivisor().getToken());
+        if(activation != null && activation.isActivated()) {
+            response = Response.of(ResponseType.ACCOUNTACTIVATION_TOKENALREADYACTIVATED);
         } else {
-            response = Response.of(ResponseType.REGISTERERROR_EMAILORLOGINEXIST);
+            boolean activated = bean.activate(u);
+            if(activated) {
+                response = Response.of(ResponseType.ACCOUNTACTIVATIONOK);
+            } else {
+                response = Response.of(ResponseType.ACCOUNTACTIVATION_BADLOGINORTOKEN);
+            }
         }
         SessionUtils.serializeAndSendAsynchronously(t, response);
         

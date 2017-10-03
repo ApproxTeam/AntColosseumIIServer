@@ -21,4 +21,8 @@ public class Views {
     public static class LoginActionView extends ActionView {
         
     }
+    
+    public static class AccountActivationActionView extends ActionView {
+        
+    }
 }

@@ -6,6 +6,7 @@
 package com.approxteam.antcolosseumserver.gamelogic.interfaces;
 
 import com.approxteam.antcolosseumserver.entities.Player;
+import com.approxteam.antcolosseumserver.entities.PlayerActivation;
 import com.approxteam.antcolosseumserver.gamelogic.Action;
 import javax.ejb.Remote;
 
@@ -17,8 +18,11 @@ import javax.ejb.Remote;
 public interface RegisterBean {
     public boolean register(Action action);
     
+    public boolean activate(Action action);
     
     public void sendActivationLink(String email, String nickName, String token);
     
     public Player findPlayer(Action action);
+    
+    public PlayerActivation findActivation(String token);
 }

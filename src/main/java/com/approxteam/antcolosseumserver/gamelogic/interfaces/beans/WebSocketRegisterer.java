@@ -8,11 +8,13 @@ package com.approxteam.antcolosseumserver.gamelogic.interfaces.beans;
 import com.approxteam.antcolosseumserver.configuration.PropertiesBuilder;
 import com.approxteam.antcolosseumserver.configuration.PropertyComment;
 import com.approxteam.antcolosseumserver.entities.Player;
+import com.approxteam.antcolosseumserver.entities.PlayerActivation;
 import com.approxteam.antcolosseumserver.gamelogic.Action;
 import com.approxteam.antcolosseumserver.gamelogic.interfaces.Mailer;
 import com.approxteam.antcolosseumserver.gamelogic.interfaces.RegisterBean;
 import com.approxteam.antcolosseumserver.mailer.MailWrapper;
 import com.approxteam.antcolosseumserver.templates.ActivationMail;
+import java.util.Date;
 import java.util.Properties;
 import java.util.UUID;
 import javax.ejb.EJB;
@@ -53,14 +55,32 @@ public class WebSocketRegisterer implements RegisterBean{
         player.setEmail(email);
         player.setPassword(password);
         player.setNickname(nickName);
-        String token = UUID.randomUUID().toString().replaceAll("-", "");
-        sendActivationLink(email, nickName, token);
-        return save(player);
+        
+        boolean status = save(player);
+        
+        String token = getRandomToken();
+        PlayerActivation playerActivation = new PlayerActivation();
+        playerActivation.setPlayer(player);
+        playerActivation.setActivated(false);
+        playerActivation.setToken(token);
+        
+        boolean playerActivationStatus = save(playerActivation);
+        if(playerActivationStatus) {
+            sendActivationLink(email, nickName, token);
+        }
+        
+        return status;
     }
+    
+    
     
     private MailWrapper constructActivationEmail(String to, String nickName, String token) {
         MailWrapper wrapper = new ActivationMail(to, constructActivationLink(token), nickName);
         return wrapper;
+    }
+    
+    private String getRandomToken() {
+        return UUID.randomUUID().toString().replaceAll("-", "");
     }
     
     private String constructActivationLink(String token) {
@@ -91,8 +111,6 @@ public class WebSocketRegisterer implements RegisterBean{
         }
     }
     
-    
-    
     private boolean save(Object o) {
         try {
             entityManager.persist(o);
@@ -108,5 +126,39 @@ public class WebSocketRegisterer implements RegisterBean{
         mailer.send(constructActivationEmail(email, nickName, token));
     }
 
-    
+    @Override
+    public boolean activate(Action action) {
+        String token = action.getActivateDivisor().getToken();
+        PlayerActivation playerActivation = findActivation(token);
+        if(playerActivation == null) {
+            return false;
+        }
+        String actionNickName = action.getActivateDivisor().getNickname();
+        if(!actionNickName.equals(playerActivation.getPlayer().getNickname())) {
+            return false;
+        }
+        
+        playerActivation.setActivated(true);
+        playerActivation.setDateActivated(new Date());
+        
+        return save(playerActivation);
+        
+    }
+
+    @Override
+    public PlayerActivation findActivation(String token) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<PlayerActivation> cq = cb.createQuery(PlayerActivation.class);
+        Root<PlayerActivation> playerActivation = cq.from(PlayerActivation.class);
+        ParameterExpression<String> tokenParameter = cb.parameter(String.class);
+        cq.select(playerActivation).where(cb.equal(playerActivation.get("token"), tokenParameter));
+        TypedQuery<PlayerActivation> query = entityManager.createQuery(cq);
+        query.setParameter(tokenParameter, token);
+        try {
+            PlayerActivation result = query.getSingleResult();
+            return result;
+        } catch(Exception e) {
+            return null;
+        }
+    }
 }
