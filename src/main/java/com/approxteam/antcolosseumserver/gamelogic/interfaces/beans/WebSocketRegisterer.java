@@ -84,7 +84,7 @@ public class WebSocketRegisterer implements RegisterBean{
     }
     
     private String constructActivationLink(String token, String nickname) {
-        return properties.getProperty("appLink") + "nickname=" + nickname + "&" + "token=" + token;
+        return properties.getProperty("appLink") + "index.html?nickname=" + nickname + "&" + "token=" + token;
     }
    
     @Override
