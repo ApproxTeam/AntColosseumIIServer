@@ -75,7 +75,7 @@ public class WebSocketRegisterer implements RegisterBean{
     
     
     private MailWrapper constructActivationEmail(String to, String nickName, String token) {
-        MailWrapper wrapper = new ActivationMail(to, constructActivationLink(token), nickName);
+        MailWrapper wrapper = new ActivationMail(to, constructActivationLink(token, nickName), nickName);
         return wrapper;
     }
     
@@ -83,8 +83,8 @@ public class WebSocketRegisterer implements RegisterBean{
         return UUID.randomUUID().toString().replaceAll("-", "");
     }
     
-    private String constructActivationLink(String token) {
-        return properties.getProperty("appLink") + token;
+    private String constructActivationLink(String token, String nickname) {
+        return properties.getProperty("appLink") + "nickname=" + nickname + "&" + "token=" + token;
     }
    
     @Override
